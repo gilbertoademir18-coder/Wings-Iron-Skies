@@ -54,7 +54,7 @@
 
 | Área | Ferramenta |
 |---|---|
-| Engine | Godot 4.x (última estável), GDScript |
+| Engine | Godot 4.7 (instalado via winget: `GodotEngine.GodotEngine`), GDScript |
 | Input | Input Map do Godot (gamepad XInput nativo no Windows) |
 | Pixel art / animação | Aseprite (alternativas grátis: Pixelorama / LibreSprite) |
 | Música estilo Mega Drive (FM/YM2612) | Furnace Tracker (grátis) ou DefleMask; alternativa moderna: FL Studio / LMMS |
@@ -65,4 +65,32 @@
 
 # Convenções
 
-- (A definir: estrutura de pastas, nomenclatura, etc.)
+- **Estrutura de pastas:**
+  - `project.godot` fica na raiz;
+  - cenas em `scenes/`;
+  - scripts em `scripts/`;
+  - assets (futuros) em `assets/`.
+- **Resolução base:** 640x360. A janela padrão é 1280x720 com `stretch/mode=viewport` e `scale_mode=integer`. O filtro de textura é nearest, para manter o pixel art nítido.
+- **Input:** as ações são registradas por código em `scripts/input_setup.gd` (`InputSetup.setup()`, chamado em `main.gd`):
+  - `move_left`, `move_right`, `move_up`, `move_down`: setas, D-pad e analógico esquerdo;
+  - `shoot`: `A`, `Z` ou `Espaço` no teclado; botão A ou X no controle;
+  - `start`: `ENTER` ou Start.
+- **Camadas de colisão:**
+  - 1 = jogador;
+  - 2 = tiros do jogador;
+  - 4 = inimigos.
+
+  O inimigo monitora as camadas 1 e 2 e trata a colisão em `_on_area_entered`.
+- **Scripts:** GDScript tipado, com `class_name` em cada entidade (`Player`, `Enemy`, `Bullet`, `Explosion`, `Background`, `Hud`).
+- **Gráficos provisórios:** por enquanto tudo é desenhado em `_draw()`. Esses desenhos serão trocados por sprites em pixel art.
+- **Commits:** mensagens em português, no estilo Conventional Commits (`feat:`, `fix:`, `docs:`...).
+
+# Estado atual
+
+- **Protótipo 0.1** (out/2026): tela de título, nave com tiro, ondas de jatos amarelos em senoide, explosões, pontos, 3 vidas com invulnerabilidade ao renascer, game over com restart, e cenário do mar (manhã) com parallax.
+- **Como rodar:** abrir `project.godot` no Godot 4 e apertar F5.
+- **Validar sem abrir o editor:**
+  - importar: `godot_console --headless --path . --import`
+  - rodar: `godot_console --headless --path . --quit-after 300`
+
+  `godot_console` fica em `%LOCALAPPDATA%\Microsoft\WinGet\Links`.
